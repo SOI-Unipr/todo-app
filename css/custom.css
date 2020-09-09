@@ -1,1 +1,136 @@
 /* Write here anything required to complete the laboratory */
+
+.text-center {
+  text-align: center;
+}
+
+button i.eos-icons ~ span {
+  line-height: 1.5rem;
+  margin-left: 0.5rem;
+  height: 24px;
+  display: inline-block;
+}
+
+button {
+  line-height: 24px;
+  border-inline: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  background-color: #6577c9;
+  box-shadow: none;
+  border: 1px solid #6577c9;
+  color: white;
+}
+
+button:hover, button:focus {
+  background-color: #f8c82a;
+  border-color: #f8c82a;
+}
+
+input[type=text] {
+  border-inline: none;
+  border: 1px solid #6577c9;
+  border-radius: 3px;
+  padding: 3px 5px;
+}
+
+input[type=text]:focus {
+  border-color: #f8c82a;
+}
+
+.input-group input[type=text] ~ button {
+  margin-left: 0;
+  border-left: none;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.input-group input[type=text] {
+  margin-right: -1px;
+  border-right: none;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Layout */
+
+.soi.content {
+  margin: 1rem auto;
+  min-width: 80%;
+  max-width: 90%;
+}
+
+.soi .header {
+}
+
+.soi .header h1 {
+  /*TODO*/
+}
+
+.soi .header img.logo {
+  margin-right: 1rem;
+}
+
+.soi .panel {
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccdae3;
+  background-color: #edf0f2;
+  margin: 1rem auto 0;
+  width: 90%;
+}
+
+/* Input fields */
+
+.soi .form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.soi .form-group .input-group {
+  width: 90%;
+  display: flex;
+}
+
+.soi .input-group input[type=text] {
+  flex-grow: 10;
+}
+
+/* Tasks */
+
+.soi .tasks {
+  padding-top: 1rem;
+}
+
+.soi .tasks:first-child {
+  border-top: none;
+}
+
+.soi .task {
+  padding: 0.5rem;
+  border-top: 1px solid #ccdae3;
+  border-radius: 1px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.soi .task:first-of-type {
+  border-top: none;
+}
+
+.soi .task-left {
+  flex-grow: 10;
+  display: flex;
+  align-items: center;
+}
+
+.soi .task-left label {
+  margin-left: 1rem;
+}
+
+.soi .task-right {
+}

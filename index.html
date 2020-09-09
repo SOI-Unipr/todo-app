@@ -25,8 +25,95 @@
 </head>
 <body>
 
-  <!-- Implement here -->
-  <p>Hi, edit me to complete the laboratory exercise!</p>
+<div class="soi content">
+
+  <!-- Header -->
+  <div class="header">
+    <h1 class="text-center"><img class="logo" src="icon.png" width="52" alt="UniPR Logo">Things to do</h1>
+  </div>
+
+  <!-- Panels -->
+  <div class="panel">
+    <h3>Enter new things to do</h3>
+
+    <form>
+      <div class="form-group">
+        <div class="input-group">
+          <input name="task" type="text" value="" placeholder="Type some task">
+          <button type="submit">
+            <i class="eos-icons">add</i>
+            <span>Add</span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+  <div class="panel">
+
+    <h3><i class="eos-icons">list</i> Your pending tasks</h3>
+
+    <div class="panel-commands">
+      <a href="#" title="Mark tasks as complete">Complete selected</a>
+    </div>
+
+    <!-- Tasks -->
+    <div class="tasks">
+
+      <div class="task">
+        <div class="task-left">
+          <input type="checkbox" name="task-001">
+          <label class="task-item">More hacking</label>
+        </div>
+
+        <div class="task-right">
+          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
+          <button class="task-btn" title="Complete this task"><i class="eos-icons">delete</i></button>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-left">
+          <input type="checkbox" name="task-001">
+          <label class="task-item">More hacking</label>
+        </div>
+
+        <div class="task-right">
+          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
+          <button class="task-btn" title="Complete this task"><i class="eos-icons">delete</i></button>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-left">
+          <input type="checkbox" name="task-001">
+          <label class="task-item">More hacking</label>
+        </div>
+
+        <div class="task-right">
+          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
+          <button class="task-btn" title="Complete this task"><i class="eos-icons">delete</i></button>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="task-left">
+          <input type="checkbox" name="task-001">
+          <label class="task-item">More hacking</label>
+        </div>
+
+        <div class="task-right">
+          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
+          <button class="task-btn" title="Complete this task"><i class="eos-icons">delete</i></button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
 
 <script src="js/vendor/modernizr-3.11.2.min.js"></script>
 <script src="js/plugins.js"></script>
