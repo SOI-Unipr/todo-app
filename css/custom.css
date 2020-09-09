@@ -1,5 +1,9 @@
 /* Write here anything required to complete the laboratory */
 
+h1,h2,h3,h4,h5,label,input,button,select,option,p,textarea {
+  color: #444;
+}
+
 .text-center {
   text-align: center;
 }
@@ -54,24 +58,24 @@ input[type=text]:focus {
 
 /* Layout */
 
-.soi.content {
+.content {
   margin: 1rem auto;
   min-width: 80%;
   max-width: 90%;
 }
 
-.soi .header {
+.header {
 }
 
-.soi .header h1 {
+.header h1 {
   /*TODO*/
 }
 
-.soi .header img.logo {
+.header img.logo {
   margin-right: 1rem;
 }
 
-.soi .panel {
+.panel {
   padding: 1rem;
   border-radius: 6px;
   border: 1px solid #ccdae3;
@@ -82,33 +86,33 @@ input[type=text]:focus {
 
 /* Input fields */
 
-.soi .form-group {
+.form-group {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
-.soi .form-group .input-group {
+.form-group .input-group {
   width: 90%;
   display: flex;
 }
 
-.soi .input-group input[type=text] {
+.input-group input[type=text] {
   flex-grow: 10;
 }
 
 /* Tasks */
 
-.soi .tasks {
+.tasks {
   padding-top: 1rem;
 }
 
-.soi .tasks:first-child {
+.tasks:first-child {
   border-top: none;
 }
 
-.soi .task {
+.task {
   padding: 0.5rem;
   border-top: 1px solid #ccdae3;
   border-radius: 1px;
@@ -118,19 +122,19 @@ input[type=text]:focus {
   width: 100%;
 }
 
-.soi .task:first-of-type {
+.task:first-of-type {
   border-top: none;
 }
 
-.soi .task-left {
+.task-left {
   flex-grow: 10;
   display: flex;
   align-items: center;
 }
 
-.soi .task-left label {
+.task-left label {
   margin-left: 1rem;
 }
 
-.soi .task-right {
+.task-right {
 }
