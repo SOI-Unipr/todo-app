@@ -139,3 +139,20 @@ input[type=text]:focus {
 
 .task-right {
 }
+
+/* Toast */
+
+.toast {
+  width: 100%;
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.toast.error {
+  background-color: #dc143ce0;
+  color: #222222;
+}

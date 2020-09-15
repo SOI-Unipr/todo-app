@@ -36,7 +36,7 @@
   <div class="panel">
     <h3>Enter new things to do</h3>
 
-    <form>
+    <form name="new-task">
       <div class="form-group">
         <div class="input-group">
           <input name="task" type="text" value="" placeholder="Type some task">
@@ -59,61 +59,22 @@
     </div>
 
     <!-- Tasks -->
-    <div class="tasks">
-
-      <div class="task">
-        <div class="task-left">
-          <input type="checkbox" id="task-001" name="task-001">
-          <label for="task-001" class="task-item">More hacking</label>
-        </div>
-
-        <div class="task-right">
-          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
-          <button class="task-btn" title="Complete this task"><i class="eos-icons">done</i></button>
-        </div>
-      </div>
-
-      <div class="task">
-        <div class="task-left">
-          <input type="checkbox" id="task-002" name="task-002">
-          <label for="task-002" class="task-item">More hacking</label>
-        </div>
-
-        <div class="task-right">
-          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
-          <button class="task-btn" title="Complete this task"><i class="eos-icons">done</i></button>
-        </div>
-      </div>
-
-      <div class="task">
-        <div class="task-left">
-          <input type="checkbox" id="task-003" name="task-003">
-          <label for="task-003" class="task-item">More hacking</label>
-        </div>
-
-        <div class="task-right">
-          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
-          <button class="task-btn" title="Complete this task"><i class="eos-icons">done</i></button>
-        </div>
-      </div>
-
-      <div class="task">
-        <div class="task-left">
-          <input type="checkbox" id="task-004" name="task-004">
-          <label for="task-004" class="task-item">More hacking</label>
-        </div>
-
-        <div class="task-right">
-          <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
-          <button class="task-btn" title="Complete this task"><i class="eos-icons">done</i></button>
-        </div>
-      </div>
-
-    </div>
+    <div class="tasks"></div>
 
   </div>
 </div>
 
+<script type="text/html" id="task-template">
+  <div class="task-left">
+    <input type="checkbox" id="" name="">
+    <label for="" class="task-item"></label>
+  </div>
+
+  <div class="task-right">
+    <button class="task-btn" title="Edit this task"><i class="eos-icons">edit</i></button>
+    <button class="task-btn" title="Complete this task"><i class="eos-icons">done</i></button>
+  </div>
+</script>
 
 <script src="js/vendor/modernizr-3.11.2.min.js"></script>
 <script src="js/plugins.js"></script>
