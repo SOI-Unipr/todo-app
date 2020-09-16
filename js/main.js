@@ -63,7 +63,7 @@
      * @param callback
      */
     on(event, callback) {
-      const id = seq();
+      const id = this._seq();
       this._subscribers.push({id, event, callback});
       return {
         unsubscribe: this._unsubscribe.bind(this)
@@ -103,6 +103,7 @@
     //@formatter:off
     get id() { return this._id; }
     get description() { return this._description; }
+    set description(description) { this._description = description; }
     get timestamp() { return this._timestamp; }
     //@formatter:on
   }
@@ -111,17 +112,17 @@
    * Encapsulates the control and view logics behind a single task.
    */
   class TaskComponent extends EventEmitter {
-    constructor(root, model) {
+    constructor(model) {
       super();
-      this._root = root;
       this._model = model;
       this._element = null;
       this._handlers = [];
+      this._edit = null;
     }
 
     destroy() {
       this._handlers.forEach(h => h.unregister());
-      this._element?.remove();
+      this._element.remove();
     }
 
     init() {
@@ -148,14 +149,64 @@
     }
 
     edit() {
-      // TODO
+      if (this._edit) {
+        this._edit.classList.remove('hidden');
+      } else {
+        this._edit = document.createElement('div');
+        this._edit.className = 'task-edit';
+        this._edit.innerHTML = document.querySelector('script#task-edit-template').textContent;
+
+        const btnSave = this._edit.querySelector('button[name=save]');
+        let hdlr = new Handler('click', btnSave, () => this.save());
+        this._handlers.push(hdlr);
+
+        const btnCancel = this._edit.querySelector('button[name=cancel]');
+        hdlr = new Handler('click', btnCancel, () => this.cancel());
+        this._handlers.push(hdlr);
+      }
+
+      const inp = this._edit.querySelector('input');
+      inp.value = this._model.description;
+
+      const children = [
+        this._element.querySelector('.task-left'),
+        this._element.querySelector('.task-right')];
+
+      children.forEach(c => c.classList.add('hidden'));
+      this._element.append(this._edit);
+    }
+
+    save() {
+      if (this._edit) {
+        const newDesc = this._edit.querySelector('input').value || '';
+        if (newDesc.trim()) {
+          this._model.description = newDesc.trim();
+        }
+        this._update();
+        this._hideEditField();
+      }
+    }
+
+    cancel() {
+      this._hideEditField();
     }
 
     complete() {
       this.emit('completed', this._model);
     }
 
-    update() {
+    _hideEditField() {
+      if (this._edit) {
+        this._edit.classList.add('hidden');
+      }
+
+      const children = [
+        this._element.querySelector('.task-left'),
+        this._element.querySelector('.task-right')];
+      children.forEach(c => c.classList.remove('hidden'));
+    }
+
+    _update() {
       if (this._element) {
         const lbl = this._element.querySelector('label');
         lbl.textContent = this._model.description;
@@ -193,7 +244,7 @@
 
   function removeSelectedTasks() {
     const inps = document.querySelectorAll('.task-left input[type=checkbox]:checked');
-    const tasks = Array.prototype.slice.apply(inps).map(el => ({ id: taskIdOf(el) }));
+    const tasks = Array.prototype.slice.apply(inps).map(el => ({id: taskIdOf(el)}));
     tasks.forEach(removeTask);
   }
 
@@ -203,7 +254,7 @@
     if (desc !== '') {
       const root = document.querySelector('.content .panel .tasks');
       const model = new TaskModel(seq(), desc);
-      const component = new TaskComponent(root, model);
+      const component = new TaskComponent(model);
       tasks.push({model, component});
       const el = component.init();
       root.appendChild(el);
