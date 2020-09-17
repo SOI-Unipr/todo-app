@@ -159,7 +159,7 @@
       // Everything is good, the response was received.
       if (req.status === 200 || req.status === 201) {
         const hdr = req.getResponseHeader('Content-type');
-        if (hdr === 'application/json' || hdr === 'text/json') {
+        if (hdr.substr(0, 16) === 'application/json' || hdr.substr(0, 9) === 'text/json') {
           resolve(JSON.parse(req.responseText));
         } else {
           const e = new Error('Not a JSON response');
@@ -217,7 +217,7 @@
 
         // prepares the response handler
         req.onreadystatechange = () => handleJsonResponse(req, resolve, reject);
-        req.open(method, mkUrl(this.baseUrl, path, queryParams));
+        req.open(method, mkUrl(this._baseUrl, path, queryParams));
 
         // populates additional headers
         setHeaders(req, headers);
@@ -385,8 +385,8 @@
     }
   }
 
-  const seq = sequencer();
   const tasks = [];
+  const client = new RestClient('/api');
 
   function toast(msg, type) {
     let t = document.body.querySelector('.toast');
@@ -399,12 +399,22 @@
     document.body.insertBefore(t, document.body.firstChild);
   }
 
-  function removeTask(task) {
-    const i = tasks.findIndex(t => t.model.id === task.id);
-    if (i >= 0) {
-      const {component} = tasks[i];
-      component.destroy();
-      tasks.splice(i, 1);
+  async function removeTask(task) {
+    try {
+      let i = tasks.findIndex(t => t.model.id === task.id);
+      if (i >= 0) {
+        console.log(`Deleting task ${task.id}...`);
+        const deleted = await client.del(`task/${encodeURIComponent(task.id)}`);
+        console.log(`Task '${deleted.description}' successfully deleted!`);
+
+        // this must be repeated as other things might have changed
+        i = tasks.findIndex(t => t.model.id === task.id);
+        const {component} = tasks[i];
+        component.destroy();
+        tasks.splice(i, 1);
+      }
+    } catch (e) {
+      console.error(`Cannot delete task ${task.id}`, e);
     }
   }
 
@@ -419,21 +429,28 @@
     tasks.forEach(removeTask);
   }
 
-  function addTask(form) {
+  function createTaskComponent(dto) {
+    const root = document.querySelector('.content .panel .tasks');
+    const model = new TaskModel(dto.id, dto.description);
+    const component = new TaskComponent(model);
+    tasks.push({model, component});
+    const el = component.init();
+    root.appendChild(el);
+    component.on('completed', removeTask);
+  }
+
+  async function addTask(form) {
     const inp = form.querySelector('input');
     const desc = (inp.value || '').trim();
-    if (desc !== '') {
-      const root = document.querySelector('.content .panel .tasks');
-      const model = new TaskModel(seq(), desc);
-      const component = new TaskComponent(model);
-      tasks.push({model, component});
-      const el = component.init();
-      root.appendChild(el);
-      component.on('completed', removeTask);
+    if (desc) {
+      console.log(`Saving new task '${desc}'...`);
+      const dto = await client.post('task', {description: desc});
+      console.log('Task successfully saved', {dto});
+      createTaskComponent(dto);
     }
   }
 
-  function init() {
+  async function init() {
     const form = document.forms.namedItem('new-task');
     if (!form) {
       toast('Cannot initialize components: no <b>form</b> found', 'error');
@@ -450,6 +467,13 @@
       $event.preventDefault();
       removeSelectedTasks();
     });
+
+    try {
+      const resp = await client.get('tasks');
+      resp.results.forEach(createTaskComponent);
+    } catch (e) {
+      console.error('Something went wrong getting tasks', e);
+    }
   }
 
 
