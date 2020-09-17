@@ -104,9 +104,11 @@
 
     //@formatter:off
     get id() { return this._id; }
+    set id(id) { this._id = id; }
     get description() { return this._description; }
     set description(description) { this._description = description; }
     get timestamp() { return this._timestamp; }
+    set timestamp(ts) { this._timestamp = ts; }
     //@formatter:on
   }
 
@@ -280,9 +282,53 @@
   }
 
   /**
+   * A task that can be synchronized with the REST API.
+   */
+  class RestTaskModel extends TaskModel {
+    /**
+     * Instances a new `RestTaskModel`.
+     * @param id {number?} Task identifier, can be null for newly created tasks.
+     * @param description {string} A description
+     * @param client {RestClient} A rest client
+     */
+    constructor(id, description, client) {
+      super(id, description);
+      this._client = client;
+    }
+
+    toDto() {
+      return {id: this.id, description: this.description, timestamp: this.timestamp};
+    }
+
+    async create() {
+      let dto = this.toDto();
+      dto = await this._client.post('task', dto);
+      this.id = dto.id;
+      this.timestamp = Date.parse(dto.timestamp);
+      return this;
+    }
+
+    async delete() {
+      await this._client.del(`task/${encodeURIComponent(this.id)}`);
+      return this;
+    }
+
+    async update(newDesc) {
+      let dto = {description: newDesc};
+      await this._client.put(`task/${encodeURIComponent(this.id)}`, dto);
+      this.description = newDesc;
+      return this;
+    }
+  }
+
+  /**
    * Encapsulates the control and view logics behind a single task.
    */
   class TaskComponent extends EventEmitter {
+    /**
+     * Instances a new `TaskComponent` component.
+     * @param model {RestTaskModel} A task model
+     */
     constructor(model) {
       super();
       this._model = model;
@@ -347,11 +393,16 @@
       this._element.append(this._edit);
     }
 
-    save() {
+    async save() {
       if (this._edit) {
-        const newDesc = this._edit.querySelector('input').value || '';
-        if (newDesc.trim()) {
-          this._model.description = newDesc.trim();
+        const newDesc = (this._edit.querySelector('input').value || '').trim();
+        if (newDesc) {
+          try {
+            console.debug(`Attempting to update task ${this._model.id} with '${newDesc}'...`);
+            await this._model.update(newDesc);
+          } catch (e) {
+            console.log(`Cannot update task ${this._model.id}`);
+          }
         }
         this._update();
         this._hideEditField();
@@ -404,8 +455,9 @@
       let i = tasks.findIndex(t => t.model.id === task.id);
       if (i >= 0) {
         console.log(`Deleting task ${task.id}...`);
-        const deleted = await client.del(`task/${encodeURIComponent(task.id)}`);
-        console.log(`Task '${deleted.description}' successfully deleted!`);
+        const {model} = tasks[i];
+        await model.delete();
+        console.log(`Task ${model.id}, '${model.description}' successfully deleted!`);
 
         // this must be repeated as other things might have changed
         i = tasks.findIndex(t => t.model.id === task.id);
@@ -429,9 +481,8 @@
     tasks.forEach(removeTask);
   }
 
-  function createTaskComponent(dto) {
+  function createTaskComponent(model) {
     const root = document.querySelector('.content .panel .tasks');
-    const model = new TaskModel(dto.id, dto.description);
     const component = new TaskComponent(model);
     tasks.push({model, component});
     const el = component.init();
@@ -444,9 +495,10 @@
     const desc = (inp.value || '').trim();
     if (desc) {
       console.log(`Saving new task '${desc}'...`);
-      const dto = await client.post('task', {description: desc});
-      console.log('Task successfully saved', {dto});
-      createTaskComponent(dto);
+      const model = new RestTaskModel(undefined, desc, client);
+      await model.create();
+      console.log('Task successfully saved', {model: model.toDto()});
+      createTaskComponent(model);
     }
   }
 
@@ -470,7 +522,10 @@
 
     try {
       const resp = await client.get('tasks');
-      resp.results.forEach(createTaskComponent);
+      resp.results.forEach(dto => {
+        const model = new RestTaskModel(dto.id, dto.description, client);
+        createTaskComponent(model);
+      });
     } catch (e) {
       console.error('Something went wrong getting tasks', e);
     }
