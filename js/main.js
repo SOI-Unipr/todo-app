@@ -112,44 +112,13 @@
     //@formatter:on
   }
 
-  function endRemoveAndTrim(str, char) {
-    if (str) {
-      str = str.trimRight();
-      while (str && str[str.length - 1] === char) {
-        str = str.substr(0, str.length - 1).trimRight();
-      }
-    }
-    return str;
-  }
-
-  function startRemoveAndTrim(str, char) {
-    if (str) {
-      str = str.trimLeft();
-      while (str && str[0] === char) {
-        str = str.substr(1, str.length - 1).trimLeft();
-      }
-    }
-    return str;
-  }
-
   function mkUrl(baseUrl, path, queryParams) {
-    const bu = endRemoveAndTrim((baseUrl || '').trim(), '/');
-    const p = startRemoveAndTrim(path.trim(), '/');
-    let url = [bu, p].join('/');
+    const url = new URL(baseUrl, document.baseURI);
+    url.pathname = path;
     if (queryParams && typeof queryParams === 'object') {
-      const params = [];
       for (let key of Object.keys(queryParams)) {
-        const k = encodeURIComponent(key);
-        const val = queryParams[key];
-        if (val) {
-          let v = encodeURIComponent(val);
-          params.push(`${k}=${v}`);
-        } else {
-          params.push(k)
-        }
-      }
-      if (params.length) {
-        url += '?' + params.join('&');
+        const v = queryParams[key];
+        url.searchParams.append(key, v);
       }
     }
 
