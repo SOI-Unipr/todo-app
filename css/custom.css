@@ -1,7 +1,30 @@
 /* Write here anything required to complete the laboratory */
 
-h1,h2,h3,h4,h5,label,input,button,select,option,p,textarea {
-  color: #444;
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #ccdae3;
+  --bgLight: #edf0f2;
+  --text: #444;
+  --primary: #6577c9;
+  --primaryContrast: white;
+  --secondary: #f8c82a;
+  --secondaryContrast: #6577c9;
+  --accent: #2AF8C8;
+  --warn: #C82AF8;
+  --warnContrast: white;
+  --error: #dc143ce0;
+  --errorContrast: #222222;
+}
+
+h1, h2, h3, h4, h5, label, input, button, select, option, p, textarea {
+  color: var(--text);
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .text-center {
@@ -20,36 +43,45 @@ button {
   border-inline: none;
   border-radius: 6px;
   padding: 5px 10px;
-  background-color: #6577c9;
+  background-color: var(--primary);
   box-shadow: none;
-  border: 1px solid #6577c9;
-  color: white;
+  border: 1px solid var(--primary);
+  color: var(--primaryContrast);
+}
+
+button.outline {
+  background-color: var(--bgLight);
+  border-color: var(--primary);
+  color: var(--text);
+}
+button.outline:hover {
+  color: var(--primaryContrast);
 }
 
 button:hover, button:focus {
-  background-color: #f8c82a;
-  border-color: #f8c82a;
+  background-color: var(--secondary);
+  border-color: var(--secondary);
 }
 
 button.warn {
-  background-color: #C82AF8;
-  border-color: #C82AF8;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
 button.warn:hover, button.warn:focus {
-  background-color: #2AF8C8;
-  border-color: #2AF8C8;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
 input[type=text] {
   border-inline: none;
-  border: 1px solid #6577c9;
+  border: 1px solid var(--primary);
   border-radius: 3px;
   padding: 3px 5px;
 }
 
 input[type=text]:focus {
-  border-color: #f8c82a;
+  border-color: var(--secondary);
 }
 
 .input-group input[type=text] ~ button {
@@ -95,8 +127,8 @@ input[type=text]:focus {
 .panel {
   padding: 1rem;
   border-radius: 6px;
-  border: 1px solid #ccdae3;
-  background-color: #edf0f2;
+  border: 1px solid var(--bg);
+  background-color: var(--bgLight);
   margin: 1rem auto 0;
   width: 90%;
 }
@@ -131,7 +163,7 @@ input[type=text]:focus {
 
 .task {
   padding: 0.5rem;
-  border-top: 1px solid #ccdae3;
+  border-top: 1px solid var(--bg);
   border-radius: 1px;
   display: flex;
   flex-direction: row;
@@ -174,6 +206,6 @@ input[type=text]:focus {
 }
 
 .toast.error {
-  background-color: #dc143ce0;
-  color: #222222;
+  background-color: var(--error);
+  color: var(--errorContrast);
 }

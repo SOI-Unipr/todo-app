@@ -1,6 +1,6 @@
 'use strict';
 
-(function (win, EventEmitter, RestTaskModel) {
+(function (win) {
 
   /**
    * Encapsulates the control and view logics behind a single task.
@@ -125,4 +125,4 @@
   /* Exporting component */
   win.TaskComponent ||= TaskComponent;
 
-})(window, window.EventEmitter, window.RestTaskModel);
+})(window);

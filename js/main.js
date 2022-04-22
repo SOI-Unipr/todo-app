@@ -1,32 +1,25 @@
 'use strict';
 
 (async function (RestClient, TasksComponent) {
-  const ROOT = document.querySelector('.content #root');
-
-  async function replaceChildrenWith(root, elem) {
-    // removes any child already present
-    for (const child of root.children) {
-      child.remove();
-    }
-    await root.appendChild(elem);
-  }
+  const root = document.querySelector('.content #root');
+  const components = [];
 
   async function init() {
     const client = new RestClient('/api');
-    // const token = localStorage.getItem('token');
-    let elem;
-    // if (token) {
+    const token = localStorage.getItem('token');
+    let elem, comp;
+    if (token) {
       // initialize the tasks
-      const tasks = new TasksComponent(client);
-      elem = await tasks.init();
-    // } else {
+      comp = new TasksComponent(client);
+    } else {
       // initialize the login panel
-      // const login = new LoginComponent(client);
-      // elem = login.init();
-    // }
+      comp = new LoginComponent(client);
+    }
 
-    await replaceChildrenWith(ROOT, elem);
-
+    elem = await comp.init();
+    components.forEach(c => c.destroy());
+    await root.appendChild(elem);
+    components.push(comp);
   }
 
   // initializes the components

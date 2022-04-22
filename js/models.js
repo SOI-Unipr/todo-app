@@ -1,6 +1,6 @@
 'use strict';
 
-(function (win, RestClient) {
+(function (win) {
 
   /**
    * Representation of a task.
@@ -72,4 +72,4 @@
   win.RestTaskModel ||= RestTaskModel;
   win.TaskModel ||= TaskModel;
 
-})(window, window.RestClient);
+})(window);

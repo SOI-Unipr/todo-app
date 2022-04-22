@@ -1,4 +1,4 @@
-(function (win, toast) {
+(function (win) {
 
   /**
    * Given an HTML element representing a task, extracts the task's ID.
@@ -108,4 +108,4 @@
   /* Exporting component */
   win.TasksComponent ||= TasksComponent;
 
-})(window, window.toast);
+})(window);
