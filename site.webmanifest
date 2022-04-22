@@ -1,6 +1,6 @@
 {
-  "short_name": "",
-  "name": "",
+  "short_name": "soi-todo",
+  "name": "SOI Todo",
   "icons": [{
     "src": "icon.png",
     "type": "image/png",

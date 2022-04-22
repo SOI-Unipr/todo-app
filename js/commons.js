@@ -1,6 +1,6 @@
 'use strict';
 
-(function(win) {
+(function (win) {
 
   /**
    * Creates a new sequence function.
@@ -92,9 +92,26 @@
     }
   }
 
-  /* exports */
+  /**
+   * Displays a toast when something happens.
+   * @param msg {string} A message
+   * @param type {string} The type
+   */
+  function toast(msg, type) {
+    let t = document.body.querySelector('.toast');
+    if (t) {
+      t.remove();
+    }
+    t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = msg;
+    document.body.insertBefore(t, document.body.firstChild);
+  }
+
+  /* Exports components and functions */
   win.sequencer ||= sequencer;
   win.EventEmitter ||= EventEmitter;
   win.Handler ||= Handler;
+  win.toast ||= toast;
 
 })(window);
