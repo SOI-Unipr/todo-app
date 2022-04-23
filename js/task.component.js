@@ -27,11 +27,18 @@
       this.#edit = null;
     }
 
+    /**
+     * Destroys this component, removing it from it's parent node.
+     */
     destroy() {
       this.#handlers.forEach(h => h.unregister());
       this.#element.remove();
     }
 
+    /**
+     * Initializes the component.
+     * @return {HTMLElement} The root element for this component.
+     */
     init() {
       this.#element = document.createElement('div');
       this.#element.className = 'task';

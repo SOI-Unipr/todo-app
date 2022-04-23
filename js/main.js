@@ -10,7 +10,7 @@
 
   async function init() {
     const token = localStorage.getItem('id_token');
-    let elem, comp;
+    let elem, /** @type {{init:()=>Promise<HTMLElement>,destroy:()=>void}} */ comp;
     if (token) {
       // initializes the tasks
       comp = new TasksComponent(client);

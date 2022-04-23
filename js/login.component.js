@@ -22,6 +22,9 @@
       this.#client = client;
     }
 
+    /**
+     * Destroys this component, removing it from it's parent node.
+     */
     destroy() {
       this.#handlers.forEach(h => h.unregister());
       this.#element.remove();
@@ -76,10 +79,13 @@
 
       const {id_token, access_token, refresh_token} = await this.#client.get('/tokens', {code});
       console.info('🔒 User successfully logged in!');
+      const page = localStorage.getItem('state');
       localStorage.setItem('id_token', id_token);
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
-      this.emit('authenticated', {id_token, access_token, refresh_token});
+      localStorage.removeItem('nonce');
+      localStorage.removeItem('state');
+      this.emit('authenticated', {id_token, access_token, refresh_token, page});
     }
 
     login() {

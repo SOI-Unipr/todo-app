@@ -27,6 +27,13 @@
     }
 
     /**
+     * Destroys this component, removing it from it's parent node.
+     */
+    destroy() {
+      this.#element.remove();
+    }
+
+    /**
      * Initializes the component.
      * @return {Promise<HTMLElement>} The root element for this component.
      */
