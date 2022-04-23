@@ -18,6 +18,10 @@
     #client = null;
     #tasks = [];
 
+    /**
+     * Instances this component.
+     * @param client {RestClient} A REST client
+     */
     constructor(client) {
       this.#client = client;
     }

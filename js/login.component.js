@@ -5,9 +5,12 @@
   /**
    * A login component.
    */
-  class LoginComponent {
-    #element = null;
-    #client = null;
+  class LoginComponent extends EventEmitter {
+    /** @type {HTMLElement} */
+    #element;
+    /** @type {RestClient} */
+    #client;
+    /** @type {Handler[]} */
     #handlers = [];
 
     /**
@@ -15,6 +18,7 @@
      * @param client {RestClient} The REST client
      */
     constructor(client) {
+      super();
       this.#client = client;
     }
 
@@ -32,11 +36,59 @@
       const hdlr = new Handler('click', btn, () => this.login());
       this.#handlers.push(hdlr);
 
+      // noinspection ES6MissingAwait
+      this.getTokensIfAuthorized();
+
       return this.#element;
     }
 
+    /**
+     * Looks into the header, is there something we got back from Google?
+     * Something like this:
+     *  state=["11??11","http://localhost:9000/"]
+     *  &code=4/0AX4XfWhB???????K1LBxePQ
+     *  &scope=email+https://www.googleapis.com/auth/userinfo.email+openid
+     *  &authuser=0
+     *  &prompt=consent
+     */
+    async getTokensIfAuthorized() {
+      const url = new URL(document.URL);
+      const state = url.searchParams.get('state');
+      const code = url.searchParams.get('code');
+      if (!state || !code) {
+        return;
+      }
+
+      let nonce;
+      try {
+        nonce = JSON.parse(state)[0];
+      } catch (e) {
+        console.error('💢 Cannot parse nonce and URL in state param', state);
+      }
+      if (localStorage.getItem('nonce') !== nonce) {
+        console.warn('💢 Nonce differs from saved one, aborting login');
+        return;
+      }
+
+      const {user, access_token, refresh_token} = await this.#client.get('/tokens', {code});
+      console.info('🔒 User successfully logged in!', user);
+      localStorage.setItem('user', user);
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+      this.emit('authenticated', {user, access_token, refresh_token});
+    }
+
     login() {
-      // TODO
+      const nonce = (Math.random() * 900_000 + 100_000).toFixed();
+      const state = document.location;
+      localStorage.setItem('nonce', nonce);
+      localStorage.setItem('state', state);
+      const url = new URL(document.URL);
+      url.pathname = '/api/login';
+      url.searchParams.append('nonce', nonce);
+      url.searchParams.append('state', state);
+      console.debug('Redirecting to login URL...');
+      window.location = url.href;
     }
   }
 

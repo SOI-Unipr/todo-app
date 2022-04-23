@@ -61,8 +61,9 @@
 
     /**
      * Adds a new subscriber for the specified event.
-     * @param event
-     * @param callback
+     * @param event {string} An event name
+     * @param callback {(data:any)=>void} A callback to be called when event is emitted
+     * @return {{unsubscribe:()=>void}} An object to use to unsubscribe
      */
     on(event, callback) {
       const id = this._seq();

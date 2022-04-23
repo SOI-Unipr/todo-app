@@ -1,19 +1,27 @@
 'use strict';
 
-(async function (RestClient, TasksComponent) {
+(async function () {
+  const client = new RestClient('/api');
   const root = document.querySelector('.content #root');
+  /** @type {{init:()=>Promise<HTMLElement>,destroy:()=>void}[]} */
   const components = [];
+  /** @type {{unsubscribe:() => void}|null} */
+  let subscription = null;
 
   async function init() {
-    const client = new RestClient('/api');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     let elem, comp;
     if (token) {
-      // initialize the tasks
+      // initializes the tasks
       comp = new TasksComponent(client);
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+      subscription = null;
     } else {
-      // initialize the login panel
+      // initializes the login panel
       comp = new LoginComponent(client);
+      subscription = comp.on('authenticated', init);
     }
 
     elem = await comp.init();
@@ -26,4 +34,4 @@
   await init();
   console.info('🏁 Application initialized');
 
-})(window.RestClient, window.TasksComponent);
+})();
