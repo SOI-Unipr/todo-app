@@ -27,6 +27,10 @@
       this.#element.remove();
     }
 
+    /**
+     * Initializes the component.
+     * @return {Promise<HTMLElement>} The root element for this component.
+     */
     async init() {
       this.#element = document.createElement('div');
       this.#element.className = 'tasks';
@@ -70,12 +74,12 @@
         return;
       }
 
-      const {user, access_token, refresh_token} = await this.#client.get('/tokens', {code});
-      console.info('🔒 User successfully logged in!', user);
-      localStorage.setItem('user', user);
+      const {id_token, access_token, refresh_token} = await this.#client.get('/tokens', {code});
+      console.info('🔒 User successfully logged in!');
+      localStorage.setItem('id_token', id_token);
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
-      this.emit('authenticated', {user, access_token, refresh_token});
+      this.emit('authenticated', {id_token, access_token, refresh_token});
     }
 
     login() {

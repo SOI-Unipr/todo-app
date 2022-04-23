@@ -6,9 +6,13 @@
    * Encapsulates the control and view logics behind a single task.
    */
   class TaskComponent extends EventEmitter {
-    #model = null;
-    #element = null;
+    /** @type {RestTaskModel} */
+    #model;
+    /** @type {HTMLElement|null} */
+    #element;
+    /** @type {Handler[]} */
     #handlers = [];
+    /** @type {HTMLElement|null} */
     #edit = null;
 
     /**

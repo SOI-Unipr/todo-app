@@ -30,7 +30,8 @@
    * A task that can be synchronized with the REST API.
    */
   class RestTaskModel extends TaskModel {
-    #client = null;
+    /** @type {RestClient} */
+    #client;
 
     /**
      * Instances a new `RestTaskModel`.

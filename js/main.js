@@ -9,7 +9,7 @@
   let subscription = null;
 
   async function init() {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('id_token');
     let elem, comp;
     if (token) {
       // initializes the tasks

@@ -26,6 +26,10 @@
       this.#client = client;
     }
 
+    /**
+     * Initializes the component.
+     * @return {Promise<HTMLElement>} The root element for this component.
+     */
     async init() {
       this.#element = document.createElement('div');
       this.#element.className = 'tasks';
